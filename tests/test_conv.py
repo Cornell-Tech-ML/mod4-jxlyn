@@ -76,7 +76,7 @@ def test_conv2() -> None:
 if numba.cuda.is_available():
     @pytest.mark.task4_4b
     def test_conv1d_cuda() -> None:
-        TEST_SAMPLES = 30  # Changed the number of test samples
+        TEST_SAMPLES = 30  
         for tensor_shape, weight_shape in zip(
             [
                 (1, 1, 8),  # Updated tensor shapes
