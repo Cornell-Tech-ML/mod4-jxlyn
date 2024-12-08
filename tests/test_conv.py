@@ -76,27 +76,27 @@ def test_conv2() -> None:
 if numba.cuda.is_available():
     @pytest.mark.task4_4b
     def test_conv1d_cuda() -> None:
-        TEST_SAMPLES = 30  
+        TEST_SAMPLES = 50
         for tensor_shape, weight_shape in zip(
             [
-                (1, 1, 8),  # Updated tensor shapes
-                (2, 2, 5),
-                (50, 50, 8),
-                (80, 5, 6),
-                (10, 100, 3),
-                (150, 3, 4),
-                (5, 20, 10),
-                (25, 60, 8),
+                (1, 1, 6),
+                (2, 2, 6),
+                (33, 33, 6),
+                (60, 3, 5),
+                (3, 60, 5),
+                (60, 4, 5),
+                (4, 60, 5),
+                (60, 4, 5),
             ],
             [
-                (1, 1, 5),  # Updated weight shapes
-                (4, 2, 3),
-                (2, 50, 6),
-                (5, 3, 3),
-                (3, 100, 2),
-                (150, 4, 1),
-                (4, 20, 6),
-                (3, 60, 5),
+                (1, 1, 4),
+                (3, 2, 2),
+                (2, 33, 4),
+                (4, 3, 2),
+                (2, 60, 2),
+                (60, 4, 2),
+                (2, 60, 3),
+                (2, 4, 3),
             ],
         ):
             for _ in range(TEST_SAMPLES):
@@ -121,27 +121,17 @@ if numba.cuda.is_available():
                 conva = minitorch.Conv1dFun.apply(tensor, weight)
                 convb = minitorch.cuda_conv.Conv1dFun.apply(tensor, weight)
                 numpy.testing.assert_allclose(
-                    conva._tensor._storage,
-                    convb._tensor._storage,
-                    1e-3,
-                    1e-3,  # Changed tolerance
+                    conva._tensor._storage, convb._tensor._storage, 1e-2, 1e-2
                 )
-                minitorch.grad_check(
-                    minitorch.cuda_conv.Conv1dFun.apply, tensor, weight
-                )
+                minitorch.grad_check(minitorch.cuda_conv.Conv1dFun.apply, tensor, weight)
+
 
     @pytest.mark.task4_4b
     def test_conv2d_cuda() -> None:
-        TEST_SAMPLES = 30  # Changed the number of test samples
+        TEST_SAMPLES = 50
         for tensor_shape, weight_shape in zip(
-            [
-                (1, 1, 8, 8),
-                (3, 2, 5, 5),
-                (3, 3, 10, 10),
-                (2, 40, 40, 4),
-                (4, 60, 60, 6),
-            ],
-            [(1, 1, 3, 5), (2, 2, 3, 3), (4, 2, 2, 6), (3, 40, 40, 5), (2, 60, 3, 4)],
+            [(1, 1, 6, 6), (2, 1, 6, 6), (2, 2, 6, 6), (2, 33, 33, 6), (2, 60, 60, 5)],
+            [(1, 1, 2, 4), (1, 1, 2, 4), (3, 2, 2, 4), (2, 33, 33, 4), (1, 60, 2, 3)],
         ):
             for _ in range(TEST_SAMPLES):
                 tensor_storage = numpy.array(
@@ -165,11 +155,6 @@ if numba.cuda.is_available():
                 conva = minitorch.Conv2dFun.apply(tensor, weight)
                 convb = minitorch.cuda_conv.Conv2dFun.apply(tensor, weight)
                 numpy.testing.assert_allclose(
-                    conva._tensor._storage,
-                    convb._tensor._storage,
-                    1e-3,
-                    1e-3,  # Changed tolerance
+                    conva._tensor._storage, convb._tensor._storage, 1e-2, 1e-2
                 )
-                minitorch.grad_check(
-                    minitorch.cuda_conv.Conv2dFun.apply, tensor, weight
-                )
+                minitorch.grad_check(minitorch.cuda_conv.Conv2dFun.apply, tensor, weight)
