@@ -1,15 +1,9 @@
 import random
 
 import embeddings
-from datasets import load_dataset
 
-from pathlib import Path
-import sys
-
-import streamlit as st
-
-sys.path.append(str(Path(__file__).resolve().parent.parent))
 import minitorch
+from datasets import load_dataset
 
 
 BACKEND = minitorch.TensorBackend(minitorch.FastOps)
