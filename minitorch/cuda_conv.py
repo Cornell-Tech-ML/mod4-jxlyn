@@ -148,7 +148,7 @@ def _tensor_conv1d(
 
             # Process kernel width in blocks
             for kernel_start in range(0, kernel_width, BLOCK_DIM):
-                kernel_idx = kernel_start + py
+                kernel_idx = py + kernel_start
 
                 # Cache kernel weights
                 if channel_cache_idx < in_channels and kernel_idx < kernel_width:
